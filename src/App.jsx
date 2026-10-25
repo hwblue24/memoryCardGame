@@ -1,64 +1,102 @@
 import { useEffect, useState} from 'react'
 import './App.css'
 
-function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange}) { 
+
+
+function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonHistory, setPokemonHistory, increment, setScore}) { 
 
   const [pokemon,setPokemon] = useState(null)
+  const [pokemonId, setPokemonId] = useState(null)
 
-  
-    function handleClick (pokemonMin,pokemonMax) {
-      const randomNum = Math.floor(Math.random() * (pokemonMax - pokemonMin + 1)) + pokemonMin;
-      
-      fetch(`https://pokeapi.co/api/v2/pokemon/${randomNum}`)
-      .then(function(response) {
-        return response.json ();
+  function handleClick(pokemonMin, pokemonMax) {
+    const randomNum = Math.floor(Math.random() * (pokemonMax - pokemonMin + 1)) + pokemonMin;
+
+    fetch(`https://pokeapi.co/api/v2/pokemon/${randomNum}`)
+      .then(function (response) {
+        return response.json();
       })
-      .then(function(response) {
-        console.log(response)
+      .then(function (response) {
         setPokemon(response.sprites.other['official-artwork'].front_default)
+        setPokemonId(response.id)
         
       })
+  }
 
-    }
+  useEffect(() => {
+    handleClick(pokemonMin, pokemonMax)
+  }, [allChange])
 
-    useEffect(()=>{
-      handleClick(pokemonMin,pokemonMax)
-    },[allChange])
+  
 
-    return (
-    <div onClick={()=> {
+  return (
+    <div onClick={() => {
       setAllChange(!allChange)
+      if(pokemonHistory.includes(pokemonId)) {
+        setPokemonHistory([])
+        setScore(0)
+      }else {
+        setPokemonHistory([...pokemonHistory, pokemonId])
+        increment();
+      }
+      
+
     }}>
-      <img src = {pokemon} /> 
+      <img src={pokemon} />
     </div>
   )
 }
 
+
+
 function App() {
   const [allChange, setAllChange] = useState(false)
+  const [pokemonHistory, setPokemonHistory] = useState([]);
+
+  const [score, setScore] = useState(0)
+
+  function increment () {
+    setScore(score+1)
+  }
+
 
   return (
-    <div>
-      <PokemonCard 
-        allChange = {allChange}
-        setAllChange = {setAllChange}
-        pokemonMin = {1}
-        pokemonMax = {5}
-        
-      />
+    <>
+       <div>
+        <PokemonCard
+          setPokemonHistory ={setPokemonHistory}
+          pokemonHistory={pokemonHistory}
+          allChange={allChange}
+          setAllChange={setAllChange}
+          pokemonMin={1}
+          pokemonMax={5}
+          setScore={setScore}
+          increment={increment}
+          
 
-      <PokemonCard 
-        allChange = {allChange}
-        setAllChange = {setAllChange}
-        pokemonMin = {6}
-        pokemonMax = {10}
-        
-      />
+        />
 
-      
-    </div>
+        <PokemonCard
+          setPokemonHistory ={setPokemonHistory}
+          pokemonHistory={pokemonHistory}
+          allChange={allChange}
+          setAllChange={setAllChange}
+          pokemonMin={6}
+          pokemonMax={10}
+          setScore={setScore}
+          increment={increment}
+
+        />
+
+      </div>
+
+      <h1>Score:{score}</h1>
+
+
+    </>
     
-  ) 
+   
+
+  )
 }
 
 
