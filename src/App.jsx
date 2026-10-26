@@ -3,7 +3,7 @@ import './App.css'
 
 
 
-function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonHistory, setPokemonHistory, increment, setScore}) { 
+function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonHistory, setPokemonHistory, increment, setScore, score, setBestScore}) { 
 
   const [pokemon,setPokemon] = useState(null)
   const [pokemonId, setPokemonId] = useState(null)
@@ -33,7 +33,9 @@ function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonH
       setAllChange(!allChange)
       if(pokemonHistory.includes(pokemonId)) {
         setPokemonHistory([])
+        setBestScore(score)
         setScore(0)
+        
       }else {
         setPokemonHistory([...pokemonHistory, pokemonId])
         increment();
@@ -51,6 +53,7 @@ function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonH
 function App() {
   const [allChange, setAllChange] = useState(false)
   const [pokemonHistory, setPokemonHistory] = useState([]);
+  const [bestScore,setBestScore] = useState(0)
 
   const [score, setScore] = useState(0)
 
@@ -61,7 +64,7 @@ function App() {
 
   return (
     <>
-       <div>
+       <div className = "parent">
         <PokemonCard
           setPokemonHistory ={setPokemonHistory}
           pokemonHistory={pokemonHistory}
@@ -70,7 +73,9 @@ function App() {
           pokemonMin={1}
           pokemonMax={5}
           setScore={setScore}
+          score = {score}
           increment={increment}
+          setBestScore = {setBestScore}
           
 
         />
@@ -83,13 +88,32 @@ function App() {
           pokemonMin={6}
           pokemonMax={10}
           setScore={setScore}
+          score = {score}
           increment={increment}
+          setBestScore = {setBestScore}
+
+        />
+
+
+        <PokemonCard
+          setPokemonHistory ={setPokemonHistory}
+          pokemonHistory={pokemonHistory}
+          allChange={allChange}
+          setAllChange={setAllChange}
+          pokemonMin={11}
+          pokemonMax={15}
+          setScore={setScore}
+          score = {score}
+          increment={increment}
+          setBestScore = {setBestScore}
+          
 
         />
 
       </div>
 
       <h1>Score:{score}</h1>
+      <h1>Best Score:{bestScore}</h1>
 
 
     </>
