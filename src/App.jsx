@@ -3,7 +3,7 @@ import './App.css'
 
 
 
-function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonHistory, setPokemonHistory, increment, setScore, score, setBestScore}) { 
+function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonHistory, setPokemonHistory, increment, setScore, score, setBestScore, bestScore}) { 
 
   const [pokemon,setPokemon] = useState(null)
   const [pokemonId, setPokemonId] = useState(null)
@@ -33,16 +33,23 @@ function PokemonCard ({pokemonMin, pokemonMax, allChange, setAllChange, pokemonH
       setAllChange(!allChange)
       if(pokemonHistory.includes(pokemonId)) {
         setPokemonHistory([])
-        setBestScore(score)
+        if(bestScore===0) {
+          setBestScore(score)
+        }else if (score>bestScore) {
+          setBestScore(score)
+        }
+        
         setScore(0)
         
       }else {
         setPokemonHistory([...pokemonHistory, pokemonId])
         increment();
       }
+
       
 
     }}>
+
       <img src={pokemon} />
     </div>
   )
@@ -76,6 +83,7 @@ function App() {
           score = {score}
           increment={increment}
           setBestScore = {setBestScore}
+          bestScore = {bestScore}
           
 
         />
@@ -91,6 +99,7 @@ function App() {
           score = {score}
           increment={increment}
           setBestScore = {setBestScore}
+          bestScore = {bestScore}
 
         />
 
@@ -106,6 +115,7 @@ function App() {
           score = {score}
           increment={increment}
           setBestScore = {setBestScore}
+          bestScore = {bestScore}
           
 
         />
